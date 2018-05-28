@@ -25,15 +25,19 @@ public:
     explicit MainWindow(QList<double> *list = nullptr,QWidget *parent = 0);
     ~MainWindow();
     //void BildGraf();
-    QString Win_or_Loss();
+    int Win_or_Loss();
     char  Up_or_Down();
+     QTimer *time;
+     int timering=1;
 private:
-    QTimer *time;
+   // QTimer *time;
+    QTimer *timeshow;
     Downloader *downloader;
     QList<double>* list;
     Ui::MainWindow *ui;
     QCustomPlot *customPlot;
     QCPGraph *graphic;
+    QPicture *picture;
 
 public slots:
     void slotRangeChanged (const QCPRange &newRange);
@@ -41,9 +45,13 @@ public slots:
     void AddNumber(QByteArray num);
     void AddNumberToList(double s);
     void Prognoz();
-
+    void show1();
+    //void on_spinBox_valueChanged(int arg1);
 private slots:
     void readFile();
+
+
+ //  void on_spinBox_valueChanged(int arg1);
 
 signals:
     void onReady();

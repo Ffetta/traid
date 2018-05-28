@@ -25,6 +25,7 @@ void Downloader::onResult(QNetworkReply *reply)
             file->close();
             qDebug() << "Downloading is completed";
             emit onReady();
+            delete file;
         }
     }
 }
