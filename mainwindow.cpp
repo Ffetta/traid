@@ -19,6 +19,7 @@ MainWindow::MainWindow(QList<double> *_list, QWidget *parent) :
 
     customPlot = new QCustomPlot(); // Инициализируем графическое полотно]
 
+    ui->doubleSpinBox->setMaximum(balans);
   ui->label_3->setStyleSheet("QLabel {background-color : blak;font-size: 32px;  color : white; }");
   ui->label_3->setText("Скоро все начнется!");
 //ui->gridLayout->addWidget();
@@ -50,13 +51,26 @@ MainWindow::MainWindow(QList<double> *_list, QWidget *parent) :
     time = new QTimer;
     timeshow=new QTimer;
     time->start(timering*6000);
-    connect(downloader, &Downloader::onReady, this, &MainWindow::readFile);
+
    connect(time,QTimer::timeout, downloader, &Downloader::getData);
     connect(timeshow,QTimer::timeout,this,&MainWindow::show1);
+    connect(downloader, &Downloader::onReady, this, &MainWindow::readFile);
+    //connect(ui->spinBox,QSpinBox::valueChanged,this,&MainWindow::changeStavka);
   //  customPlot->replot();
  //   connect(ui->spinBox,&QSpinBox::valueChanged,this,&MainWindow::on_spinBox_valueChanged);
-    timeshow->start(1700000);
-    show1();
+    timeshow->start(1700000);//устанавливает размер
+    ui->doubleSpinBox->setValue(0.86);
+    ui->spinBox_2->setValue(30);
+
+         ui->label->setStyleSheet("QLabel {font-size: 26px;  color : green; }");
+          ui->label_6->setStyleSheet("QLabel {font-size: 26px;   }");
+          ui->label_4->setStyleSheet("QLabel {font-size: 26px;  background-color : red; }");
+          ui->label_5->setStyleSheet("QLabel {font-size: 26px; background-color : green;  }");
+          ui->label_7->setStyleSheet("QLabel {font-size: 26px;   }");
+          ui->label_8->setStyleSheet("QLabel {font-size: 26px;   }");
+          ui->label_9->setStyleSheet("QLabel {font-size: 26px;   }");
+
+         show1();
 }
 void MainWindow:: BildGraf(){
 
@@ -104,18 +118,35 @@ void MainWindow:: BildGraf(){
             ui->label_2->setText("Останется на месте");
         }
     }
+    stavka=ui->spinBox->value();
+    mnogitel=ui->doubleSpinBox->value();
+
+
     if(score.size()>1){
         int a=score.last();
-
-
       if(a==2){
        ui->label->setStyleSheet("QLabel {font-size: 26px;  color : red; }");
          ui->label->setText("Не оправдался");
+         kolvoLosse++;
+         balans=balans-stavka;
+         QString s;
+         s=QString::number(kolvoLosse);
+         ui->label_5->setText("Количество проигранных: "+s);
+
  }else{
-       ui->label->setStyleSheet("QLabel {font-size: 26px;  color : green; }");
+      //  ui->label->setStyleSheet("QLabel {font-size: 26px;  color : green; }");
          ui->label->setText("Оправдался");
+         kolvoWin++;
+         balans=balans+stavka*mnogitel;
+         QString s;
+         s=QString::number(kolvoWin);
+         ui->label_5->setText("Количество выгранных: "+s);
+
  }
  }
+    QString s;
+    s=QString::number(balans);
+    ui->label_6->setText("Баланc "+s);
 }
 
 
@@ -187,7 +218,9 @@ double  *ReadFile(){//расшифровка данных
 
 
 void MainWindow::Prognoz(){
-
+time->stop();
+int a=ui->spinBox_2->value();
+time->start(a*1000);
     if (list->size()>=1){
         list->removeAt(0);
     }
@@ -247,11 +280,15 @@ int MainWindow::Win_or_Loss(){
     }
     else return 1;//оправдался
 }
+void MainWindow::changeStavka(){
 
 
 
+}
 
-//void MainWindow::on_spinBox_valueChanged(int arg1)
+
+
+//    void MainWindow::on_spinBox_valueChanged(int arg1)
 //{
 //    timering=arg1;
 //     time = new QTimer;

@@ -13,6 +13,7 @@
 #include <iterator>
 #include <iostream>
 #include <QTimer>
+#include <string.h>
 namespace Ui {
 class MainWindow;
 }
@@ -29,6 +30,11 @@ public:
     char  Up_or_Down();
      QTimer *time;
      int timering=1;
+     int kolvoWin=0;
+     int kolvoLosse=0;
+     double balans=10000;
+     int stavka=0;
+     double mnogitel=0.8;
 private:
    // QTimer *time;
     QTimer *timeshow;
@@ -46,6 +52,7 @@ public slots:
     void AddNumberToList(double s);
     void Prognoz();
     void show1();
+    void changeStavka();
     //void on_spinBox_valueChanged(int arg1);
 private slots:
     void readFile();
