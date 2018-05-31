@@ -1,7 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "QThread"
-
+#include <QtCore>
+#include<QtGui>
 QList <double> spisok;
 QList<char> result;
 QList<int> score;
@@ -22,6 +23,8 @@ MainWindow::MainWindow(QList<double> *_list, QWidget *parent) :
     ui->doubleSpinBox->setMaximum(balans);
   ui->label_3->setStyleSheet("QLabel {background-color : blak;font-size: 32px;  color : white; }");
   ui->label_3->setText("Скоро все начнется!");
+  //createActions();
+      createMenu();
 //ui->gridLayout->addWidget();
    // ui->gridLayout->addWidget(customPlot,0,1,1,2);
 //    customPlot->setInteraction(QCP::iRangeZoom,true);
@@ -48,6 +51,7 @@ MainWindow::MainWindow(QList<double> *_list, QWidget *parent) :
 //    graphic->setLineStyle(QCPGraph::lsImpulse);
     connect(customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)),
             this, SLOT(slotRangeChanged(QCPRange)));
+     //connect(ui->menuBar, &QAction::changed, this, &MainWindow::spravka );
     time = new QTimer;
     timeshow=new QTimer;
     time->start(timering*6000);
@@ -55,6 +59,7 @@ MainWindow::MainWindow(QList<double> *_list, QWidget *parent) :
    connect(time,QTimer::timeout, downloader, &Downloader::getData);
     connect(timeshow,QTimer::timeout,this,&MainWindow::show1);
     connect(downloader, &Downloader::onReady, this, &MainWindow::readFile);
+    //connect(ui->action_3, &QAction::toggled, this, &MainWindow::spravka);
     //connect(ui->spinBox,QSpinBox::valueChanged,this,&MainWindow::changeStavka);
   //  customPlot->replot();
  //   connect(ui->spinBox,&QSpinBox::valueChanged,this,&MainWindow::on_spinBox_valueChanged);
@@ -62,14 +67,22 @@ MainWindow::MainWindow(QList<double> *_list, QWidget *parent) :
     ui->doubleSpinBox->setValue(0.86);
     ui->spinBox_2->setValue(30);
 
-         ui->label->setStyleSheet("QLabel {font-size: 26px;  color : green; }");
-          ui->label_6->setStyleSheet("QLabel {font-size: 26px;   }");
-          ui->label_4->setStyleSheet("QLabel {font-size: 26px;  background-color : red; }");
-          ui->label_5->setStyleSheet("QLabel {font-size: 26px; background-color : green;  }");
-          ui->label_7->setStyleSheet("QLabel {font-size: 26px;   }");
-          ui->label_8->setStyleSheet("QLabel {font-size: 26px;   }");
-          ui->label_9->setStyleSheet("QLabel {font-size: 26px;   }");
-
+   ui->centralWidget->setStyleSheet("QWidget{  background-color : white; }");
+    ui->spinBox_2->setStyleSheet("QSpinBox {font-size: 26px;   border-radius: 10px; }");
+ui->doubleSpinBox->setStyleSheet("QDoubleSpinBox {font-size: 26px;  border-radius: 10px;  }");
+ui->spinBox->setStyleSheet("QSpinBox {font-size: 26px;   border-radius: 10px;  }");
+//ui->spinBox->setStyle("QLab {font-size: 26px;   }");
+         ui->label->setStyleSheet("QLabel {font-size: 26px;  color : green;  border-radius: 10px; background-color : lightGray;}");
+          ui->label_6->setStyleSheet("QLabel {font-size: 26px; border-radius: 10px;background-color : lightGray;  }");
+           ui->label_2->setStyleSheet("QLabel {font-size: 26px; border-radius: 10px;background-color : lightGray;  }");
+          ui->label_4->setStyleSheet("QLabel {font-size: 26px;  border-radius: 10px; background-color : lightGray; color : red; }");
+          ui->label_5->setStyleSheet("QLabel {font-size: 26px; border-radius: 10px; background-color : lightGray; color : green;  }");
+          ui->label_7->setStyleSheet("QLabel {font-size: 26px;  border-radius: 10px; background-color : lightGray;}");
+          ui->label_8->setStyleSheet("QLabel {font-size: 26px;   border-radius: 10px; background-color : lightGray; }");
+          ui->label_9->setStyleSheet("QLabel {font-size: 26px;   border-radius: 10px; background-color : lightGray; }");
+          ui->label_10->setStyleSheet("QLabel {font-size: 26px;  border-radius: 10px; background-color : lightGray;  }");
+          ui->label_11->setStyleSheet("QLabel {font-size: 26px;  border-radius: 10px; background-color : lightGray;  }");
+//ui->label->setAlignment();
          show1();
 }
 void MainWindow:: BildGraf(){
@@ -107,7 +120,7 @@ void MainWindow:: BildGraf(){
     //customPlot->xAxis->setRange(time[0]-100,time[0]+100);
     customPlot->replot();
     if (result.size()>1){
-        ui->label_2->setStyleSheet("QLabel {font-size: 26px; }");
+        ui->label_2->setStyleSheet("QLabel {font-size: 26px; border-radius: 10px; background-color : lightGray; }");
         if(result.back()='1'){
             ui->label_2->setText("Вверх");
         }
@@ -125,7 +138,7 @@ void MainWindow:: BildGraf(){
     if(score.size()>1){
         int a=score.last();
       if(a==2){
-       ui->label->setStyleSheet("QLabel {font-size: 26px;  color : red; }");
+       ui->label->setStyleSheet("QLabel {font-size: 26px;  color : red;  border-radius: 10px; background-color : lightGray;}");
          ui->label->setText("Не оправдался");
          kolvoLosse++;
          balans=balans-stavka;
@@ -280,18 +293,42 @@ int MainWindow::Win_or_Loss(){
     }
     else return 1;//оправдался
 }
-void MainWindow::changeStavka(){
 
 
+
+
+void MainWindow::on_pushButton_clicked()
+{
+    balans=10000;
+    ui->spinBox->setValue(0);
+    kolvoLosse=0;
+    kolvoWin=0;
+    mnogitel=0.8;
 
 }
 
 
 
-//    void MainWindow::on_spinBox_valueChanged(int arg1)
-//{
-//    timering=arg1;
-//     time = new QTimer;
-//     time->start(100);
-//        connect(time,QTimer::timeout, downloader, &Downloader::getData);
-//}
+void MainWindow::createMenu()
+{
+ //   fileMenu = menuBar()->addMenu(tr("&File"));
+    //fileMenu->addAction(saveAction);
+ //    help = menuBar()->addMenu(tr("&Help"));
+  connect(ui->action_3, &QAction::toggled, this, &MainWindow::spravka);
+}
+
+
+void MainWindow::spravka(){
+    Form *w= new Form();
+    w->setVisible(true);
+
+
+
+}
+
+void MainWindow::on_action_3_triggered()
+{
+    Form w;
+    w.show();
+
+}

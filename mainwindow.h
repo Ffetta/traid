@@ -14,6 +14,11 @@
 #include <iostream>
 #include <QTimer>
 #include <string.h>
+#include <QMenu>
+#include <QAction>
+#include <QDebug>
+#include<form.h>
+
 namespace Ui {
 class MainWindow;
 }
@@ -23,6 +28,10 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    QMenu *fileMenu;
+    QMenu *help;
+    void createMenu();
+   // void createActions();
     explicit MainWindow(QList<double> *list = nullptr,QWidget *parent = 0);
     ~MainWindow();
     //void BildGraf();
@@ -36,7 +45,8 @@ public:
      int stavka=0;
      double mnogitel=0.8;
 private:
-   // QTimer *time;
+     void createMenus();
+        // QTimer *time;
     QTimer *timeshow;
     Downloader *downloader;
     QList<double>* list;
@@ -44,6 +54,8 @@ private:
     QCustomPlot *customPlot;
     QCPGraph *graphic;
     QPicture *picture;
+    Form *from;
+
 
 public slots:
     void slotRangeChanged (const QCPRange &newRange);
@@ -52,13 +64,18 @@ public slots:
     void AddNumberToList(double s);
     void Prognoz();
     void show1();
-    void changeStavka();
+    void spravka();
+   //void changeStavka();
     //void on_spinBox_valueChanged(int arg1);
 private slots:
     void readFile();
 
 
  //  void on_spinBox_valueChanged(int arg1);
+
+    void on_pushButton_clicked();
+
+    void on_action_3_triggered();
 
 signals:
     void onReady();

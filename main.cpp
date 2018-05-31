@@ -9,6 +9,8 @@ int main(int argc, char *argv[])
     MainWindow w(list);
     //Widget v(list);
   //  v.show();
+//Form v;
+//   v.show();
 
     w.show();
 
